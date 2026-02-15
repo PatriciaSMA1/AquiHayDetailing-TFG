@@ -51,7 +51,7 @@ public class Reserva extends AppCompatActivity {
 
     private CheckBox checkOzono, checkAntilluvia, checkFaros;
 
-    private EditText txtDireccion; // 📍 NUEVO
+    private EditText txtDireccion;
 
     private LocalDate fechaSeleccionada;
     private String horarioSeleccionado = null;
@@ -70,6 +70,9 @@ public class Reserva extends AppCompatActivity {
     private LinearLayout headerExtras, contenidoExtras;
     private LinearLayout headerHorarios;
     private TextView iconTamano, iconExtras, iconHorarios;
+
+    // ⭐ NUEVO: icono de información
+    private ImageView infoTamano;
 
     // TIEMPOS ESTIMADOS
     private final Map<String, String> tiempos = new HashMap<String, String>() {{
@@ -106,7 +109,7 @@ public class Reserva extends AppCompatActivity {
         btnReservar = findViewById(R.id.btnReservar);
         btnAbrirCalendario = findViewById(R.id.btnAbrirCalendario);
 
-        txtDireccion = findViewById(R.id.txtDireccion); // 📍 NUEVO
+        txtDireccion = findViewById(R.id.txtDireccion);
 
         menuIcon = findViewById(R.id.menuIcon);
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -124,6 +127,9 @@ public class Reserva extends AppCompatActivity {
         headerHorarios = findViewById(R.id.headerHorarios);
         iconHorarios = findViewById(R.id.iconHorarios);
 
+        // ⭐ NUEVO: referencia al icono de información
+        infoTamano = findViewById(R.id.infoTamano);
+
         // HEADER DEL MENÚ
         View headerView = navigationView.getHeaderView(0);
         profileImage = headerView.findViewById(R.id.profileImage);
@@ -138,7 +144,7 @@ public class Reserva extends AppCompatActivity {
             textTiempoEstimado.setText("Tiempo estimado: " + tiempos.get(servicioClave));
         }
 
-        // ACTUALIZAR PRECIO AL CAMBIAR TAMAÑO O EXTRAS
+        // ACTUALIZAR PRECIO
         radioGrupoTamaño.setOnCheckedChangeListener((group, checkedId) -> actualizarPrecio());
         checkOzono.setOnCheckedChangeListener((b, c) -> actualizarPrecio());
         checkAntilluvia.setOnCheckedChangeListener((b, c) -> actualizarPrecio());
@@ -148,9 +154,8 @@ public class Reserva extends AppCompatActivity {
         fechaSeleccionada = LocalDate.now();
         actualizarTextoFecha(fechaSeleccionada);
 
-        // GENERAR HORARIOS DINÁMICOS
+        // HORARIOS
         List<String> horariosDinamicos = generarHorariosDinamicos(servicioClave);
-
         recyclerHorarios.setLayoutManager(new LinearLayoutManager(this));
         HorarioAdapter adapter = new HorarioAdapter(horariosDinamicos, selected -> horarioSeleccionado = selected);
         recyclerHorarios.setAdapter(adapter);
@@ -182,10 +187,14 @@ public class Reserva extends AppCompatActivity {
 
             if (id == R.id.nav_home) startActivity(new Intent(this, PantallaPrincipal.class));
             else if (id == R.id.nav_reserva) startActivity(new Intent(this, Servicios.class));
-            else if (id == R.id.nav_servicios) startActivity(new Intent(this, PantallaServicios.class));
-            else if (id == R.id.nav_productos) startActivity(new Intent(this, PantallaProductos.class));
-            else if (id == R.id.nav_mis_citas) startActivity(new Intent(this, PantallaMisCitas.class));
-            else if (id == R.id.nav_contacto) startActivity(new Intent(this, PantallaContacto.class));
+            else if (id == R.id.nav_servicios)
+                startActivity(new Intent(this, PantallaServicios.class));
+            else if (id == R.id.nav_productos)
+                startActivity(new Intent(this, PantallaProductos.class));
+            else if (id == R.id.nav_mis_citas)
+                startActivity(new Intent(this, PantallaMisCitas.class));
+            else if (id == R.id.nav_contacto)
+                startActivity(new Intent(this, PantallaContacto.class));
             else if (id == R.id.nav_perfil) startActivity(new Intent(this, PantallaPerfil.class));
 
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -205,7 +214,38 @@ public class Reserva extends AppCompatActivity {
         configurarDesplegables();
 
         corregirReservasMalGuardadas();
+
+        // ⭐⭐⭐ NUEVO: INFORMACIÓN DEL TAMAÑO DEL VEHÍCULO ⭐⭐⭐
+        infoTamano.setOnClickListener(v -> {
+
+            int seleccionado = radioGrupoTamaño.getCheckedRadioButtonId();
+            String mensaje;
+
+            if (seleccionado == R.id.radioPequeno) {
+                mensaje = "Vehículos pequeños:\n- Fiat 500\n- Seat Ibiza\n- Renault Clio\n- Utilitarios compactos";
+
+            } else if (seleccionado == R.id.radioMediano) {
+                mensaje = "Vehículos medianos:\n- Seat León\n- Nissan Qashqai\n- Hyundai Tucson\n- Berlinas y SUV medios";
+
+            } else if (seleccionado == R.id.radioGrande) {
+                mensaje = "Vehículos grandes:\n- Kia Sorento\n- VW Sharan\n- Furgonetas tipo Transporter\n- SUV grandes";
+
+            } else {
+                mensaje = "Selecciona un tamaño para ver la información.";
+            }
+
+            new AlertDialog.Builder(Reserva.this)
+                    .setTitle("Información del vehículo")
+                    .setMessage(mensaje)
+                    .setPositiveButton("Entendido", null)
+                    .show();
+        });
+
     }
+
+    // -------------------------------
+    // RESTO DEL CÓDIGO SIN CAMBIOS
+    // -------------------------------
 
     private void configurarDesplegables() {
         headerTamano.setOnClickListener(v -> {
@@ -243,10 +283,18 @@ public class Reserva extends AppCompatActivity {
         int duracionHoras = 1;
 
         switch (servicioClave) {
-            case "interior_sin_tapiceria": duracionHoras = 2; break;
-            case "interior_con_tapiceria": duracionHoras = 2; break;
-            case "exterior": duracionHoras = 1; break;
-            case "completa": duracionHoras = 3; break;
+            case "interior_sin_tapiceria":
+                duracionHoras = 2;
+                break;
+            case "interior_con_tapiceria":
+                duracionHoras = 2;
+                break;
+            case "exterior":
+                duracionHoras = 1;
+                break;
+            case "completa":
+                duracionHoras = 3;
+                break;
         }
 
         List<String> lista = new ArrayList<>();
@@ -295,7 +343,6 @@ public class Reserva extends AppCompatActivity {
         textPrecio.setText(String.format(Locale.getDefault(), "Precio: %d €", precioTotal));
     }
 
-    // 🔥🔥🔥 MÉTODO COMPLETO PARA GUARDAR RESERVAS (CON DIRECCIÓN) 🔥🔥🔥
     private void guardarReserva() {
 
         if (horarioSeleccionado == null) {
@@ -308,7 +355,6 @@ public class Reserva extends AppCompatActivity {
             return;
         }
 
-        // 📍 Validar dirección
         String direccion = txtDireccion.getText().toString().trim();
         if (direccion.isEmpty()) {
             Toast.makeText(this, "Introduce una dirección para completar la reserva", Toast.LENGTH_SHORT).show();
@@ -323,23 +369,20 @@ public class Reserva extends AppCompatActivity {
 
         String uid = user.getUid();
 
-        // 🔥 Datos principales de la reserva
         Map<String, Object> extras = new HashMap<>();
         extras.put("servicio", servicioClave);
         extras.put("fecha", fechaSeleccionada.toString());
         extras.put("horario", horarioSeleccionado);
         extras.put("tamaño", obtenerTamañoSeleccionado());
         extras.put("precio", textPrecio.getText().toString());
-        extras.put("direccion", direccion); // 📍 NUEVO
+        extras.put("direccion", direccion);
         extras.put("timestamp", System.currentTimeMillis());
 
-        // 🔥 Extras opcionales
         List<String> extrasOpcionales = new ArrayList<>();
         if (checkOzono.isChecked()) extrasOpcionales.add("Tratamiento de ozono");
         if (checkAntilluvia.isChecked()) extrasOpcionales.add("Tratamiento antilluvia");
         if (checkFaros.isChecked()) extrasOpcionales.add("Pulido de faros");
 
-        // 🔥 Documento final
         Map<String, Object> reserva = new HashMap<>();
         reserva.put("usuarioId", uid);
         reserva.put("estado", "pendiente");
@@ -437,14 +480,17 @@ public class Reserva extends AppCompatActivity {
                             }
                         }
 
+                        // Eliminar claves numéricas incorrectas
                         for (String clave : clavesNumericas) {
                             extras.remove(clave);
                         }
 
+                        // Preparar actualización
                         Map<String, Object> actualizacion = new HashMap<>();
                         actualizacion.put("extras", extras);
                         actualizacion.put("extrasOpcionales", extrasOpcionales);
 
+                        // Guardar corrección
                         db.collection("reservas")
                                 .document(doc.getId())
                                 .update(actualizacion);

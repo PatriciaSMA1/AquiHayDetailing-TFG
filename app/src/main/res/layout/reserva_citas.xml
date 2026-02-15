@@ -111,14 +111,31 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Tamaño del vehículo"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#444"
                         android:fontFamily="@font/michroma" />
+
+                    <!-- ICONO DE INFORMACIÓN AL LADO DEL TEXTO -->
+                    <ImageView
+                        android:id="@+id/infoTamano"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="7dp"
+                        android:src="@drawable/informacion"
+                        android:contentDescription="Información"
+                        android:layout_marginStart="8dp"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <!-- SEPARADOR PARA EMPUJAR EL ICONO ▼ A LA DERECHA -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/iconTamano"
