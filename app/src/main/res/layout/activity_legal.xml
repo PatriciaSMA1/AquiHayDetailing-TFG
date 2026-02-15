@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1A1A1A"
+    android:paddingTop="40dp"
+    android:paddingBottom="40dp"
+    android:paddingStart="32dp"
+    android:paddingEnd="32dp">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <!-- Título Términos -->
+        <TextView
+            android:id="@+id/tituloTerminos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TÉRMINOS DE USO"
+            android:textColor="#F0C102"
+            android:textSize="22sp"
+            android:fontFamily="@font/michroma"
+            android:paddingBottom="16dp"/>
+
+
+        <!-- Texto Términos -->
+        <TextView
+            android:id="@+id/textTerminos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Al utilizar la aplicación AquiHayDetailing, aceptas cumplir con nuestras condiciones de servicio..."
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:lineSpacingExtra="8dp"
+            android:fontFamily="@font/inter_medium"
+            android:paddingBottom="32dp"/>
+
+
+        <!-- Título Privacidad -->
+        <TextView
+            android:id="@+id/tituloPrivacidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="POLÍTICA DE PRIVACIDAD"
+            android:textColor="#F0C102"
+            android:textSize="22sp"
+            android:fontFamily="@font/michroma"
+            android:paddingBottom="16dp"/>
+
+
+        <!-- Texto Privacidad -->
+        <TextView
+            android:id="@+id/textPrivacidad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="La aplicación recopila datos como correo electrónico y nombre para gestionar reservas..."
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:lineSpacingExtra="8dp"
+            android:fontFamily="@font/inter_medium"
+            android:paddingBottom="32dp"/>
+
+
+        <Button
+            android:id="@+id/btnVolverLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VOLVER"
+            android:textSize="16sp"
+            android:textColor="#1A1A1A"
+            android:fontFamily="@font/inter_medium"
+            android:backgroundTint="#F0C102"
+            android:padding="12dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"/>
+
+
+    </LinearLayout>
+</ScrollView>
+

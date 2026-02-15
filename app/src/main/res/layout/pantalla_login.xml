@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1A1A1A">
+
+    <!-- TITULO -->
+    <TextView
+        android:id="@+id/titulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="AquiHayDetailing"
+        android:textSize="27sp"
+        android:textColor="#F2C302"
+        android:fontFamily="@font/michroma"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="112dp" />
+
+    <!-- CORREO -->
+    <EditText
+        android:id="@+id/txtLogin"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:hint="Correo electrónico"
+        android:textSize="16sp"
+        android:fontFamily="@font/michroma"
+        android:background="@drawable/edittext_box"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/titulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="32dp" />
+
+    <!-- ERROR CORREO -->
+    <TextView
+        android:id="@+id/errorLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Falta introducir la contraseña"
+        android:textColor="#FF0000"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/txtLogin"
+        app:layout_constraintStart_toStartOf="@id/txtLogin"
+        app:layout_constraintEnd_toEndOf="@id/txtLogin"
+        android:layout_marginTop="4dp" />
+
+    <!-- CONTRASEÑA + OJO -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/contenedorPassword"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        app:layout_constraintTop_toBottomOf="@id/errorLogin"
+        app:layout_constraintStart_toStartOf="@id/txtLogin"
+        app:layout_constraintEnd_toEndOf="@id/txtLogin"
+        android:layout_marginTop="24dp">
+
+        <EditText
+            android:id="@+id/txtContraseña"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:hint="Contraseña"
+            android:textSize="16sp"
+            android:inputType="textPassword"
+            android:fontFamily="@font/michroma"
+            android:background="@drawable/edittext_box"
+            android:paddingStart="12dp"
+            android:paddingEnd="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/iconTogglePassword"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ojo_cerrado"
+            android:contentDescription="Mostrar contraseña"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ERROR CONTRASEÑA -->
+    <TextView
+        android:id="@+id/errorContraseña"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Este campo es obligatorio"
+        android:textColor="#FF0000"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/contenedorPassword"
+        app:layout_constraintStart_toStartOf="@id/contenedorPassword"
+        app:layout_constraintEnd_toEndOf="@id/contenedorPassword"
+        android:layout_marginTop="4dp" />
+
+    <!-- CHECKBOX RECORDAR -->
+    <CheckBox
+        android:id="@+id/checkRecordar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recordar correo"
+        android:textColor="#F0C102"
+        android:fontFamily="@font/inter_medium"
+        app:layout_constraintTop_toBottomOf="@id/errorContraseña"
+        app:layout_constraintStart_toStartOf="@id/contenedorPassword"
+        android:layout_marginTop="8dp" />
+
+    <!-- BOTÓN ACCEDER -->
+    <Button
+        android:id="@+id/botonAcceder"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:text="ACCEDER"
+        android:textColor="#F0C102"
+        android:textSize="17sp"
+        android:fontFamily="@font/inter_medium"
+        android:backgroundTint="#4E4E4E"
+        app:layout_constraintTop_toBottomOf="@id/checkRecordar"
+        app:layout_constraintStart_toStartOf="@id/contenedorPassword"
+        app:layout_constraintEnd_toEndOf="@id/contenedorPassword"
+        android:layout_marginTop="32dp" />
+
+    <!-- DIVISOR -->
+    <View
+        android:id="@+id/divisorVisual"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#F0C102"
+        app:layout_constraintTop_toBottomOf="@id/botonAcceder"
+        app:layout_constraintStart_toStartOf="@id/botonAcceder"
+        app:layout_constraintEnd_toEndOf="@id/botonAcceder"
+        android:layout_marginTop="24dp" />
+
+    <!-- ¿OLVIDASTE CONTRASEÑA? -->
+    <TextView
+        android:id="@+id/textContraseñaOlvidada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Has olvidado tu contraseña?"
+        android:textColor="#F6C601"
+        android:fontFamily="@font/inter_medium"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/divisorVisual"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- ¿Todavía no te has registrado? -->
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Todavía no te has registrado?"
+        android:textColor="#F0C102"
+        android:textSize="16sp"
+        android:fontFamily="@font/inter_medium"
+        app:layout_constraintTop_toBottomOf="@id/textContraseñaOlvidada"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
+    <!-- Regístrate -->
+    <TextView
+        android:id="@+id/textRegistrarse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Regístrate"
+        android:textColor="#F0C102"
+        android:textSize="16sp"
+        android:fontFamily="@font/inter_medium"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
+
+    <!-- TÉRMINOS -->
+    <TextView
+        android:id="@+id/textTerminosPolitica"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Términos de uso y Política de privacidad"
+        android:textColor="#F0C102"
+        android:textSize="16sp"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/textRegistrarse"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+

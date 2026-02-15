@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212"
+    android:paddingTop="8dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- TÍTULO MÁS PEQUEÑO Y CON MENOS MARGEN -->
+        <TextView
+            android:id="@+id/tituloEditarPerfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Editar perfil"
+            android:textSize="20sp"
+            android:textColor="#FFD700"
+            android:fontFamily="@font/michroma"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- FOTO DE PERFIL MÁS PEQUEÑA -->
+        <ImageView
+            android:id="@+id/imgPerfil"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/circle_background"
+            android:padding="4dp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- BOTÓN CAMBIAR FOTO -->
+        <Button
+            android:id="@+id/btnCambiarFoto"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="Cambiar foto"
+            android:textColor="#121212"
+            android:textStyle="bold"
+            android:backgroundTint="#FFD700"
+            android:paddingHorizontal="20dp"
+            android:layout_marginBottom="6dp"/>
+
+        <!-- BOTÓN ELIMINAR FOTO -->
+        <Button
+            android:id="@+id/btnEliminarFoto"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:text="Eliminar foto"
+            android:textColor="#FFD700"
+            android:backgroundTint="#333333"
+            android:paddingHorizontal="20dp"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- CAMPO NOMBRE MÁS ESTRECHO -->
+        <EditText
+            android:id="@+id/editNombre"
+            android:layout_width="400dp"
+            android:layout_height="48dp"
+            android:hint="Nombre"
+            android:textColor="#000000"
+            android:textColorHint="#AAAAAA"
+            android:fontFamily="@font/michroma"
+            android:background="@drawable/edittext_box"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- CAMPO CORREO MÁS ESTRECHO -->
+        <EditText
+            android:id="@+id/editCorreo"
+            android:layout_width="400dp"
+            android:layout_height="48dp"
+            android:hint="Correo electrónico"
+            android:enabled="false"
+            android:textColor="#000000"
+            android:textColorHint="#AAAAAA"
+            android:fontFamily="@font/michroma"
+            android:background="@drawable/edittext_box"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- BOTÓN GUARDAR MÁS ESTRECHO -->
+        <Button
+            android:id="@+id/btnGuardarCambios"
+            android:layout_width="400dp"
+            android:layout_height="54dp"
+            android:text="Guardar cambios"
+            android:textColor="#121212"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:backgroundTint="#FFD700"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- BOTÓN CANCELAR MÁS ESTRECHO -->
+        <Button
+            android:id="@+id/btnCancelar"
+            android:layout_width="400dp"
+            android:layout_height="54dp"
+            android:text="Cancelar"
+            android:textColor="#FFD700"
+            android:textSize="18sp"
+            android:backgroundTint="#333333"
+            android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

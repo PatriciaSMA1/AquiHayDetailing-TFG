@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">AquiHayDetailing</string>
+    <string name="banner_aquihaydetailing">Banner de Aquí Hay Detailing</string>
+
+    <string-array name="categorias_array">
+        <item>Todos</item>
+        <item>Interior</item>
+        <item>Exterior</item>
+        <item>Servicios extra</item>
+    </string-array>
+
+</resources>
+
+
+
+
+
+
+
+

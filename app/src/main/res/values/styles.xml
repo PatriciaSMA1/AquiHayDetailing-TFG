@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="EstiloMenuLateral" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">18sp</item> <!-- Tamaño del texto -->
+        <item name="android:textColor">#FFD700</item> <!-- Color amarillo -->
+        <item name="android:fontFamily">@font/michroma</item> <!-- Tipografía personalizada -->
+    </style>
+    <style name="CircularImage" parent=""> <item name="cornerFamily">rounded</item> <item name="cornerSize">50%</item> </style>
+</resources>

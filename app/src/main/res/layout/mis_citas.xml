@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#121212">
+
+
+        <!-- Header superior con logo y contacto -->
+        <include
+            android:id="@+id/headerMenu"
+            layout="@layout/header_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+
+        <!-- Contenido con padding -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+
+            <!-- Título -->
+            <TextView
+                android:id="@+id/tituloCitas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mis citas"
+                android:fontFamily="@font/michroma"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="#FFD700"
+                android:gravity="center"
+                android:layout_marginBottom="32dp"/>
+
+
+            <!-- Lista de citas -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerCitas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingBottom="32dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <!-- MENÚ LATERAL -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@android:color/white"
+        app:headerLayout="@layout/nav_header"
+        app:itemIconTint="#F4C300"
+        app:itemIconSize="30dp"
+        app:itemTextAppearance="@style/EstiloMenuLateral"
+        app:menu="@menu/nav_menu" />
+</androidx.drawerlayout.widget.DrawerLayout>

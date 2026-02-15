@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- HEADER IGUAL QUE LA PANTALLA PRINCIPAL -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/bg_toolbar_gray">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp">
+
+                    <ImageView
+                        android:id="@+id/menuIcon"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/menu"
+                        android:contentDescription="Menú" />
+
+                    <Space
+                        android:layout_width="291dp"
+                        android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:src="@drawable/imagen_circular_recortada__1_"
+                        android:contentDescription="Logo" />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- CONTENIDO SCROLLEABLE -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="#FFFFFF"
+                android:animateLayoutChanges="true">
+
+                <!-- BOTÓN CALENDARIO -->
+                <Button
+                    android:id="@+id/btnAbrirCalendario"
+                    android:layout_width="500dp"
+                    android:layout_marginHorizontal="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Abrir calendario"
+                    android:backgroundTint="#FFD700"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/michroma"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- FECHA -->
+                <TextView
+                    android:id="@+id/textFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ESPACIOS DISPONIBLES"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:fontFamily="@font/michroma"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- TIEMPO ESTIMADO -->
+                <TextView
+                    android:id="@+id/textTiempoEstimado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tiempo estimado: -"
+                    android:textSize="14sp"
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:fontFamily="@font/michroma"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- DESPLEGABLE TAMAÑO -->
+                <LinearLayout
+                    android:id="@+id/headerTamano"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="#EEEEEE"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Tamaño del vehículo"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#444"
+                        android:fontFamily="@font/michroma" />
+
+                    <TextView
+                        android:id="@+id/iconTamano"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▼"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/contenidoTamano"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:visibility="gone">
+
+                    <RadioGroup
+                        android:id="@+id/radioGrupoTamaño"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/radioPequeno"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pequeño"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/michroma"
+                            android:textColor="#000000" />
+
+                        <RadioButton
+                            android:id="@+id/radioMediano"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Mediano"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/michroma"
+                            android:textColor="#000000"
+                            android:layout_marginTop="4dp" />
+
+                        <RadioButton
+                            android:id="@+id/radioGrande"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Grande"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/michroma"
+                            android:textColor="#000000"
+                            android:layout_marginTop="4dp" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <!-- DESPLEGABLE EXTRAS -->
+                <LinearLayout
+                    android:id="@+id/headerExtras"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="#EEEEEE"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Extras disponibles"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#444"
+                        android:fontFamily="@font/michroma" />
+
+                    <TextView
+                        android:id="@+id/iconExtras"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▼"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/contenidoExtras"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:visibility="gone">
+
+                    <CheckBox
+                        android:id="@+id/checkOzono"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ozono (+5 €)"
+                        android:textSize="14sp"
+                        android:textColor="#000000"
+                        android:fontFamily="@font/michroma" />
+
+                    <CheckBox
+                        android:id="@+id/checkAntilluvia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Antilluvia (+5 €)"
+                        android:textSize="14sp"
+                        android:textColor="#000000"
+                        android:fontFamily="@font/michroma" />
+
+                    <CheckBox
+                        android:id="@+id/checkFaros"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Faros (+20 €)"
+                        android:textSize="14sp"
+                        android:textColor="#000000"
+                        android:fontFamily="@font/michroma" />
+                </LinearLayout>
+
+                <!-- DESPLEGABLE HORARIOS -->
+                <LinearLayout
+                    android:id="@+id/headerHorarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="#EEEEEE"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Horarios disponibles"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#444"
+                        android:fontFamily="@font/michroma" />
+
+                    <TextView
+                        android:id="@+id/iconHorarios"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▼"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerHorarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:visibility="gone" />
+
+                <!-- DIRECCIÓN -->
+                <EditText
+                    android:id="@+id/txtDireccion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Dirección"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/michroma"
+                    android:background="@drawable/edittext_box"
+                    android:padding="10dp"
+                    android:layout_marginTop="12dp"
+                    android:inputType="textPostalAddress" />
+
+                <!-- PRECIO -->
+                <TextView
+                    android:id="@+id/textPrecio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Precio: -"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:gravity="center"
+                    android:fontFamily="@font/michroma"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- BOTÓN RESERVAR -->
+                <Button
+                    android:id="@+id/btnReservar"
+                    android:layout_width="500dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="100dp"
+                    android:text="Reservar cita"
+                    android:backgroundTint="#FFD700"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/michroma" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <!-- MENÚ LATERAL REDUCIDO -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@android:color/white"
+        app:headerLayout="@layout/nav_header"
+        app:itemIconTint="#F4C300"
+        app:itemIconSize="24dp"
+        app:itemTextAppearance="@style/EstiloMenuLateral"
+        app:menu="@menu/nav_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/casa"
+        android:title="Inicio" />
+
+    <item android:id="@+id/nav_reserva"
+        android:icon="@drawable/reserva"
+        android:title="Reserva tu cita" />
+
+    <item android:id="@+id/nav_servicios"
+        android:icon="@drawable/limpieza"
+        android:title="Servicios" />
+
+    <item android:id="@+id/nav_productos"
+        android:icon="@drawable/productos"
+        android:title="Productos" />
+
+    <item
+        android:id="@+id/nav_mis_citas"
+        android:title="Mis citas"
+        android:icon="@drawable/cita" />
+
+    <item android:id="@+id/nav_contacto"
+        android:icon="@drawable/contacto"
+        android:title="Contacto" />
+
+    <item android:id="@+id/nav_perfil"
+        android:icon="@drawable/perfil"
+        android:title="Perfil" />
+
+</menu>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

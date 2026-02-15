@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <!-- AppBar con Toolbar personalizado -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
+
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@drawable/bg_toolbar_gray"
+                app:contentInsetStart="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetEnd="0dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+
+                    <ImageView
+                        android:id="@+id/menuIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:contentDescription="Menú"
+                        android:src="@drawable/menu" />
+
+
+                    <Space
+                        android:layout_width="87dp"
+                        android:layout_height="match_parent" />
+
+
+                    <ImageView
+                        android:id="@+id/logoImage"
+                        android:layout_width="95dp"
+                        android:layout_height="100dp"
+                        android:contentDescription="Logo Just Play Detailing"
+                        android:src="@drawable/imagen_circular_recortada__1_" />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <!-- Contenido principal scrollable -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#1A1A1A"
+                android:orientation="vertical">
+
+
+                <!-- Banner con texto superpuesto -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+
+
+                    <ImageView
+                        android:id="@+id/bannerDetailing"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/banner_aquihaydetailing"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sections_74332695_elements_1727960294020_cellbackgroundimage_original" />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#CC262626" />
+
+
+                    <TextView
+                        android:id="@+id/textoNegocio"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/michroma"
+                        android:gravity="center"
+                        android:padding="16dp"
+                        android:text="Aquí Hay Detailing"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+
+                <!-- Sección "Sobre mí" -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#000000"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/michroma"
+                        android:paddingBottom="8dp"
+                        android:text="Sobre mí"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="4dp"
+                        android:text="Somos un negocio familiar dedicado al detailing y limpieza de coches. Nos apasiona cuidar cada vehículo con atención al detalle, utilizando productos de calidad y técnicas profesionales. Creemos en el trabajo bien hecho, la confianza y el trato cercano con nuestros clientes. Cada coche que pasa por nuestras manos lo tratamos como si fuera nuestro, buscando siempre el mejor resultado."
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+
+                <!-- Carrusel con flechas e indicadores -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="396dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#1A1A1A">
+
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp" />
+
+
+                    <ImageButton
+                        android:id="@+id/flechaIzquierda"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center_vertical|start"
+                        android:layout_marginStart="8dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="Anterior"
+                        android:src="@drawable/baseline_arrow_back_ios_24" />
+
+
+                    <ImageButton
+                        android:id="@+id/flechaDerecha"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center_vertical|end"
+                        android:layout_marginEnd="8dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="Siguiente"
+                        android:src="@drawable/outline_arrow_forward_ios_24" />
+                </FrameLayout>
+
+
+                <!-- Sección Redes Sociales -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#000000"
+                    android:paddingTop="24dp"
+                    android:paddingBottom="24dp"
+                    android:gravity="center_horizontal">
+
+
+                    <TextView
+                        android:id="@+id/tituloRedes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Redes sociales"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/michroma"
+                        android:paddingBottom="16dp" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp">
+
+
+                        <ImageView
+                            android:id="@+id/iconInstagram"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="24dp"
+                            android:contentDescription="Instagram"
+                            android:src="@drawable/instagram"
+                            android:tint="#FFD700" />
+
+
+                        <ImageView
+                            android:id="@+id/iconTikTok"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="24dp"
+                            android:contentDescription="TikTok"
+                            android:src="@drawable/tiktok"
+                            android:tint="#FFD700" />
+
+
+                        <ImageView
+                            android:id="@+id/iconWhatsapp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:contentDescription="WhatsApp"
+                            android:src="@drawable/whatsapp"
+                            android:tint="#FFD700" />
+                    </LinearLayout>
+
+
+                    <!-- Enlaces legales -->
+                    <TextView
+                        android:id="@+id/textTerminos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/michroma"
+                        android:text="Términos y condiciones de Servicio"
+                        android:textColor="#FFD700"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:contentDescription="Abrir términos y condiciones" />
+
+
+                    <TextView
+                        android:id="@+id/textPolitica"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/michroma"
+                        android:text="Política de privacidad"
+                        android:textColor="#FFD700"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:contentDescription="Abrir política de privacidad" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+    <!-- MENÚ LATERAL -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@android:color/white"
+        app:headerLayout="@layout/nav_header"
+        app:itemIconTint="#F4C300"
+        app:itemIconSize="32dp"
+        app:itemTextAppearance="@style/EstiloMenuLateral"
+        app:menu="@menu/nav_menu" />
+</androidx.drawerlayout.widget.DrawerLayout>
+
+
+
+
+
+
+
+
