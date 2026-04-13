@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1A1A1A"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="32dp">
+
+        <!-- TITULO -->
+        <TextView
+            android:id="@+id/titulo2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Regístrate"
+            android:textSize="27sp"
+            android:textColor="#F2C302"
+            android:fontFamily="@font/michroma"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="43dp" />
+
+        <!-- NOMBRE -->
+        <EditText
+            android:id="@+id/txtNombre"
+            android:layout_width="439dp"
+            android:layout_height="55dp"
+            android:layout_marginHorizontal="32dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/edittext_box"
+            android:fontFamily="@font/michroma"
+            android:hint="Nombre"
+            android:padding="12dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titulo2" />
+
+        <!-- CORREO -->
+        <EditText
+            android:id="@+id/txtCorreo"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="Correo electrónico"
+            android:textSize="16sp"
+            android:fontFamily="@font/michroma"
+            android:background="@drawable/edittext_box"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/txtNombre"
+            app:layout_constraintStart_toStartOf="@id/txtNombre"
+            app:layout_constraintEnd_toEndOf="@id/txtNombre"
+            android:layout_marginTop="24dp" />
+
+        <!-- TELÉFONO -->
+        <EditText
+            android:id="@+id/txtTelefono"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:hint="Número de teléfono"
+            android:textSize="16sp"
+            android:fontFamily="@font/michroma"
+            android:background="@drawable/edittext_box"
+            android:inputType="phone"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/txtCorreo"
+            app:layout_constraintStart_toStartOf="@id/txtCorreo"
+            app:layout_constraintEnd_toEndOf="@id/txtCorreo"
+            android:layout_marginTop="24dp" />
+
+        <!-- CONTRASEÑA + OJO -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contenedorPassword"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            app:layout_constraintTop_toBottomOf="@id/txtTelefono"
+            app:layout_constraintStart_toStartOf="@id/txtTelefono"
+            app:layout_constraintEnd_toEndOf="@id/txtTelefono"
+            android:layout_marginTop="24dp">
+
+            <EditText
+                android:id="@+id/txtContraseña"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:hint="Contraseña"
+                android:textSize="16sp"
+                android:inputType="textPassword"
+                android:fontFamily="@font/michroma"
+                android:background="@drawable/edittext_box"
+                android:paddingStart="12dp"
+                android:paddingEnd="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/iconTogglePassword"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/ojo_cerrado"
+                android:contentDescription="Mostrar contraseña"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 🔥 MENSAJE DE ERROR DE CONTRASEÑA -->
+        <TextView
+            android:id="@+id/textErrorPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="#FF5555"
+            android:textSize="14sp"
+            android:fontFamily="@font/inter_medium"
+            android:visibility="gone"
+            android:maxLines="10"
+            android:lineSpacingExtra="4dp"
+            app:layout_constraintTop_toBottomOf="@id/contenedorPassword"
+            app:layout_constraintStart_toStartOf="@id/contenedorPassword"
+            app:layout_constraintEnd_toEndOf="@id/contenedorPassword"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- BOTÓN REGISTRAR -->
+        <Button
+            android:id="@+id/botonRegistrar"
+            android:layout_width="300dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="31dp"
+            android:layout_marginEnd="56dp"
+            android:backgroundTint="#4E4E4E"
+            android:fontFamily="@font/inter_medium"
+            android:text="Regístrate"
+            android:textColor="#F0C102"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/contenedorPassword" />
+
+        <!-- BOTÓN VOLVER -->
+        <Button
+            android:id="@+id/btnVolverLogin"
+            android:layout_width="300dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="56dp"
+            android:backgroundTint="#4E4E4E"
+            android:fontFamily="@font/inter_medium"
+            android:text="Volver a iniciar sesión"
+            android:textColor="#F0C102"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/botonRegistrar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

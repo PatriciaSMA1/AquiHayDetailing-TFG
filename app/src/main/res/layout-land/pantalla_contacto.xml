@@ -5,18 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <!-- Menú superior -->
         <include
             android:id="@+id/headerMenu"
             layout="@layout/header_menu" />
-
 
         <!-- Contenido principal -->
         <ScrollView
@@ -25,53 +22,64 @@
             android:background="#F5F5F5"
             android:padding="16dp">
 
-
-            <LinearLayout
-                android:orientation="vertical"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
+                <!-- TÍTULO -->
                 <TextView
+                    android:id="@+id/txtTitulo"
                     android:text="Contáctanos"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="#F2C302"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="8dp"
                     android:fontFamily="@font/michroma"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="10dp" />
 
-
+                <!-- SUBTÍTULO -->
                 <TextView
+                    android:id="@+id/txtSubtitulo"
                     android:text="Estamos aquí para ayudarte. Elige cómo quieres contactarnos 👇"
                     android:textSize="16sp"
                     android:textColor="#555"
-                    android:layout_gravity="center"
                     android:fontFamily="@font/michroma"
-                    android:layout_marginBottom="38dp"
-                    android:layout_marginTop="13dp"
-                    android:layout_marginLeft="4dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/txtTitulo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="32dp" />
 
+                <!-- TARJETAS (todas con el mismo ancho) -->
+                <LinearLayout
+                    android:id="@+id/contenedorTarjetas"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginEnd="80dp"
+                    app:layout_constraintTop_toBottomOf="@id/txtSubtitulo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
+                    <include layout="@layout/card_contacto_telefono" />
+                    <include layout="@layout/card_contacto_whatsapp" />
+                    <include layout="@layout/card_contacto_email" />
+                    <include layout="@layout/card_contacto_instagram" />
+                    <include layout="@layout/card_contacto_tiktok" />
 
+                </LinearLayout>
 
-                <!-- Tarjetas -->
-                <include layout="@layout/card_contacto_telefono" />
-                <include layout="@layout/card_contacto_whatsapp" />
-                <include layout="@layout/card_contacto_email" />
-                <include layout="@layout/card_contacto_instagram" />
-                <include layout="@layout/card_contacto_tiktok" />
-
-
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </LinearLayout>
-
 
     <!-- MENÚ LATERAL -->
     <com.google.android.material.navigation.NavigationView
@@ -85,4 +93,5 @@
         app:itemIconSize="30dp"
         app:itemTextAppearance="@style/EstiloMenuLateral"
         app:menu="@menu/nav_menu" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

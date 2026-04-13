@@ -11,43 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- HEADER IGUAL QUE LA PANTALLA PRINCIPAL -->
+        <!-- ⭐ HEADER UNIFICADO DENTRO DE APPBAR ⭐ -->
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
 
-            <androidx.appcompat.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@drawable/bg_toolbar_gray">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp">
-
-                    <ImageView
-                        android:id="@+id/menuIcon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/menu"
-                        android:contentDescription="Menú" />
-
-                    <Space
-                        android:layout_width="291dp"
-                        android:layout_height="match_parent" />
-
-                    <ImageView
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        android:src="@drawable/imagen_circular_recortada__1_"
-                        android:contentDescription="Logo" />
-                </LinearLayout>
-            </androidx.appcompat.widget.Toolbar>
+            <include
+                android:id="@+id/headerMenu"
+                layout="@layout/header_menu"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <!-- CONTENIDO SCROLLEABLE -->
@@ -68,7 +40,7 @@
                 <Button
                     android:id="@+id/btnAbrirCalendario"
                     android:layout_width="500dp"
-                    android:layout_marginHorizontal="100dp"
+                    android:layout_marginHorizontal="123dp"
                     android:layout_height="wrap_content"
                     android:text="Abrir calendario"
                     android:backgroundTint="#FFD700"
@@ -323,30 +295,29 @@
                     android:id="@+id/btnReservar"
                     android:layout_width="500dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="100dp"
-                    android:text="Reservar cita"
+                    android:layout_marginHorizontal="123dp"
                     android:backgroundTint="#FFD700"
+                    android:fontFamily="@font/michroma"
+                    android:text="Reservar cita"
                     android:textColor="#000000"
-                    android:textStyle="bold"
                     android:textSize="14sp"
-                    android:fontFamily="@font/michroma" />
+                    android:textStyle="bold" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <!-- MENÚ LATERAL REDUCIDO -->
+    <!-- MENÚ LATERAL -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
-        android:layout_width="240dp"
+        android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@android:color/white"
         app:headerLayout="@layout/nav_header"
         app:itemIconTint="#F4C300"
-        app:itemIconSize="24dp"
+        app:itemIconSize="30dp"
         app:itemTextAppearance="@style/EstiloMenuLateral"
         app:menu="@menu/nav_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
-

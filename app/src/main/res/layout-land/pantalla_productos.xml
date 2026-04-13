@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:background="#121212">
 
-        <!-- HEADER (versión horizontal ya creada) -->
+        <!-- HEADER -->
         <include
             android:id="@+id/headerMenu"
             layout="@layout/header_menu"/>
@@ -22,48 +22,61 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
             android:paddingTop="8dp">
 
-            <LinearLayout
-                android:orientation="vertical"
+            <!-- ⭐ CONTENEDOR CENTRAL PARA CONTROLAR EL ANCHO ⭐ -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
 
-                <!-- TÍTULO MÁS PEQUEÑO Y CON MENOS MARGEN -->
-                <TextView
-                    android:id="@+id/textTituloProductos"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/contenedorCentral"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Productos que utilizamos"
-                    android:textColor="#FFD700"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:fontFamily="@font/michroma"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_marginStart="80dp"
+                    android:layout_marginEnd="80dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <!-- SPINNER MÁS PEGADO AL TÍTULO -->
-                <Spinner
-                    android:id="@+id/spinnerCategorias"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#FFD700"
-                    android:popupBackground="#1E1E1E"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"/>
+                    <!-- TÍTULO -->
+                    <TextView
+                        android:id="@+id/textTituloProductos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Productos que utilizamos"
+                        android:textColor="#FFD700"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:fontFamily="@font/michroma"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="8dp"/>
 
-                <!-- LISTA DE PRODUCTOS -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerProductos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                    android:clipToPadding="false"/>
+                    <!-- SPINNER -->
+                    <Spinner
+                        android:id="@+id/spinnerCategorias"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#FFD700"
+                        android:popupBackground="#1E1E1E"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"/>
 
-            </LinearLayout>
+                    <!-- RECYCLER DE PRODUCTOS (ANCHO CONTROLADO) -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerProductos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:clipToPadding="false"/>
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
     </LinearLayout>

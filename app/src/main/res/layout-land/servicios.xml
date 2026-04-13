@@ -13,30 +13,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- HEADER (usa el mismo include que en vertical) -->
-        <include
-            android:id="@+id/headerMenu"
-            layout="@layout/header_menu"/>
+        <!-- ⭐ HEADER UNIFICADO ⭐ -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
 
-        <!-- SCROLL PARA QUE QUEPA TODO -->
+            <include
+                android:id="@+id/headerMenu"
+                layout="@layout/header_menu"/>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- SCROLL -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp">
+            android:paddingTop="12dp">
 
-            <LinearLayout
-                android:orientation="vertical"
+            <!-- ⭐ CONTENEDOR CENTRAL REDUCIDO ⭐ -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
 
-                <!-- LISTA DE SERVICIOS (tarjetas) -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerServicios"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/contenedorCentral"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:paddingBottom="16dp"/>
-            </LinearLayout>
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="60dp"
+                    android:padding="8dp"
+                    android:gravity="center_horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <!-- LISTA DE SERVICIOS -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerServicios"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:paddingBottom="8dp"/>
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
     </LinearLayout>

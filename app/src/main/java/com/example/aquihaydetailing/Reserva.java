@@ -34,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.DayOfWeek;
 import java.time.ZoneId;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -76,10 +77,10 @@ public class Reserva extends AppCompatActivity {
 
     // TIEMPOS ESTIMADOS
     private final Map<String, String> tiempos = new HashMap<String, String>() {{
-        put("interior_sin_tapiceria", "2 - 2.5 horas");
-        put("interior_con_tapiceria", "2 - 4 horas");
+        put("interior_sin_tapiceria", "2 horas");
+        put("interior_con_tapiceria", "3 horas");
         put("exterior", "1 hora");
-        put("completa", "2.5 - 4 horas");
+        put("completa", "3 horas");
     }};
 
     // PRECIOS POR TAMAÑO
@@ -89,6 +90,8 @@ public class Reserva extends AppCompatActivity {
         put("exterior", new Integer[]{15, 20, 25});
         put("completa", new Integer[]{90, 100, 120});
     }};
+
+    HorarioAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,10 +157,12 @@ public class Reserva extends AppCompatActivity {
         fechaSeleccionada = LocalDate.now();
         actualizarTextoFecha(fechaSeleccionada);
 
-        // HORARIOS
-        List<String> horariosDinamicos = generarHorariosDinamicos(servicioClave);
+        // HORARIOS INICIALES
+        int duracion = obtenerDuracionServicio(servicioClave);
+        List<String> horariosDinamicos = obtenerHorarios(fechaSeleccionada, duracion);
+
         recyclerHorarios.setLayoutManager(new LinearLayoutManager(this));
-        HorarioAdapter adapter = new HorarioAdapter(horariosDinamicos, selected -> horarioSeleccionado = selected);
+        adapter = new HorarioAdapter(horariosDinamicos, selected -> horarioSeleccionado = selected);
         recyclerHorarios.setAdapter(adapter);
 
         // CALENDARIO
@@ -173,7 +178,12 @@ public class Reserva extends AppCompatActivity {
                 fechaSeleccionada = Instant.ofEpochMilli(selection)
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate();
+
                 actualizarTextoFecha(fechaSeleccionada);
+
+                int duracionServicio = obtenerDuracionServicio(servicioClave);
+                List<String> nuevosHorarios = obtenerHorarios(fechaSeleccionada, duracionServicio);
+                adapter.updateList(nuevosHorarios);
             });
         });
 
@@ -213,8 +223,6 @@ public class Reserva extends AppCompatActivity {
 
         configurarDesplegables();
 
-        corregirReservasMalGuardadas();
-
         // ⭐⭐⭐ NUEVO: INFORMACIÓN DEL TAMAÑO DEL VEHÍCULO ⭐⭐⭐
         infoTamano.setOnClickListener(v -> {
 
@@ -241,6 +249,67 @@ public class Reserva extends AppCompatActivity {
                     .show();
         });
 
+    }
+
+    // -------------------------------
+    // NUEVO SISTEMA DE HORARIOS
+    // -------------------------------
+
+    private int obtenerDuracionServicio(String clave) {
+        switch (clave) {
+            case "interior_sin_tapiceria":
+                return 2;
+            case "interior_con_tapiceria":
+                return 3;
+            case "exterior":
+                return 1;
+            case "completa":
+                return 3;
+            default:
+                return 1;
+        }
+    }
+
+    private List<String> obtenerHorarios(LocalDate fecha, int duracionHoras) {
+
+        List<String> horarios = new ArrayList<>();
+
+        DayOfWeek dia = fecha.getDayOfWeek();
+        boolean esFinDeSemana = (dia == DayOfWeek.SATURDAY || dia == DayOfWeek.SUNDAY);
+
+        int[][] semanaTarde = {{16, 20}};
+        int[][] findeManana = {{9, 14}};
+        int[][] findeTarde = {{16, 20}};
+
+        if (!esFinDeSemana) {
+            horarios.addAll(generarBloques(semanaTarde, duracionHoras));
+        } else {
+            horarios.addAll(generarBloques(findeManana, duracionHoras));
+            horarios.addAll(generarBloques(findeTarde, duracionHoras));
+        }
+
+        return horarios;
+    }
+
+    private List<String> generarBloques(int[][] rangos, int duracionHoras) {
+
+        List<String> bloques = new ArrayList<>();
+
+        for (int[] rango : rangos) {
+
+            int inicio = rango[0];
+            int fin = rango[1];
+
+            for (int hora = inicio; hora + duracionHoras <= fin; hora++) {
+
+                int horaFin = hora + duracionHoras;
+
+                String bloque = String.format("%02d:00 - %02d:00", hora, horaFin);
+                bloques.add(bloque);
+            }
+        }
+
+        return bloques;
     }
 
     // -------------------------------
@@ -277,45 +346,6 @@ public class Reserva extends AppCompatActivity {
                 iconHorarios.setText("▲");
             }
         });
-    }
-
-    private List<String> generarHorariosDinamicos(String servicioClave) {
-        int duracionHoras = 1;
-
-        switch (servicioClave) {
-            case "interior_sin_tapiceria":
-                duracionHoras = 2;
-                break;
-            case "interior_con_tapiceria":
-                duracionHoras = 2;
-                break;
-            case "exterior":
-                duracionHoras = 1;
-                break;
-            case "completa":
-                duracionHoras = 3;
-                break;
-        }
-
-        List<String> lista = new ArrayList<>();
-
-        int horaInicio = 8;
-        int minutoInicio = 30;
-
-        while (horaInicio < 22) {
-
-            int finHora = horaInicio + duracionHoras;
-            if (finHora > 23) break;
-
-            String inicio = String.format("%02d:%02d", horaInicio, minutoInicio);
-            String fin = String.format("%02d:%02d", finHora, minutoInicio);
-
-            lista.add(inicio + " - " + fin);
-
-            horaInicio += duracionHoras;
-        }
-
-        return lista;
     }
 
     private void actualizarPrecio() {
@@ -426,13 +456,17 @@ public class Reserva extends AppCompatActivity {
         db.collection("usuarios").document(user.getUid()).get()
                 .addOnSuccessListener(document -> {
                     if (document.exists()) {
+
                         String nombreFirestore = document.getString("nombre");
                         textNombreHeader.setText(nombreFirestore != null ? nombreFirestore : "No disponible");
 
                         String url = document.getString("imagenPerfil");
-                        if (url != null) Glide.with(this).load(url).into(profileImage);
+                        if (url != null) {
+                            Glide.with(this).load(url).into(profileImage);
+                        }
                     }
                 });
+
     }
 
     private void subirImagenAFirebase(Uri uri) {
@@ -453,48 +487,5 @@ public class Reserva extends AppCompatActivity {
                         });
             });
         });
-    }
-
-    private void corregirReservasMalGuardadas() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("reservas")
-                .whereEqualTo("usuarioId", uid)
-                .get()
-                .addOnSuccessListener(query -> {
-                    for (DocumentSnapshot doc : query) {
-                        Object extrasObj = doc.get("extras");
-
-                        if (!(extrasObj instanceof Map)) continue;
-
-                        Map<String, Object> extras = (Map<String, Object>) extrasObj;
-                        List<String> extrasOpcionales = new ArrayList<>();
-
-                        List<String> clavesNumericas = new ArrayList<>();
-                        for (String key : extras.keySet()) {
-                            if (key.matches("\\d+")) {
-                                Object valor = extras.get(key);
-                                if (valor instanceof String) extrasOpcionales.add((String) valor);
-                                clavesNumericas.add(key);
-                            }
-                        }
-
-                        // Eliminar claves numéricas incorrectas
-                        for (String clave : clavesNumericas) {
-                            extras.remove(clave);
-                        }
-
-                        // Preparar actualización
-                        Map<String, Object> actualizacion = new HashMap<>();
-                        actualizacion.put("extras", extras);
-                        actualizacion.put("extrasOpcionales", extrasOpcionales);
-
-                        // Guardar corrección
-                        db.collection("reservas")
-                                .document(doc.getId())
-                                .update(actualizacion);
-                    }
-                });
     }
 }
