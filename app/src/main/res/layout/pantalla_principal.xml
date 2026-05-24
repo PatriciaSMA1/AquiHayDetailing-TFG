@@ -127,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/michroma"
                         android:paddingBottom="8dp"
-                        android:text="Sobre mí"
+                        android:text="Quiénes somos"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp"
