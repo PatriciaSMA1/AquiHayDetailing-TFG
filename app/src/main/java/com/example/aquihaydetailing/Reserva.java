@@ -3,6 +3,7 @@ package com.example.aquihaydetailing;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -49,9 +50,7 @@ public class Reserva extends AppCompatActivity {
     private RecyclerView recyclerHorarios;
     private Button btnReservar, btnAbrirCalendario;
     private RadioGroup radioGrupoTamaño;
-
     private CheckBox checkOzono, checkAntilluvia, checkFaros;
-
     private EditText txtDireccion;
 
     private LocalDate fechaSeleccionada;
@@ -60,22 +59,13 @@ public class Reserva extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private ImageView menuIcon;
-    private ImageView profileImage;
+    private ImageView menuIcon, profileImage, infoTamano;
     private TextView textNombreHeader;
 
     private ActivityResultLauncher<String> pickImageLauncher;
-
-    // DESPLEGABLES
-    private LinearLayout headerTamano, contenidoTamano;
-    private LinearLayout headerExtras, contenidoExtras;
-    private LinearLayout headerHorarios;
+    private LinearLayout headerTamano, contenidoTamano, headerExtras, contenidoExtras, headerHorarios;
     private TextView iconTamano, iconExtras, iconHorarios;
 
-    // ⭐ NUEVO: icono de información
-    private ImageView infoTamano;
-
-    // TIEMPOS ESTIMADOS
     private final Map<String, String> tiempos = new HashMap<String, String>() {{
         put("interior_sin_tapiceria", "2 horas");
         put("interior_con_tapiceria", "3 horas");
@@ -83,7 +73,6 @@ public class Reserva extends AppCompatActivity {
         put("completa", "3 horas");
     }};
 
-    // PRECIOS POR TAMAÑO
     private final Map<String, Integer[]> precios = new HashMap<String, Integer[]>() {{
         put("interior_sin_tapiceria", new Integer[]{40, 45, 50});
         put("interior_con_tapiceria", new Integer[]{65, 75, 80});
@@ -103,61 +92,47 @@ public class Reserva extends AppCompatActivity {
         textTiempoEstimado = findViewById(R.id.textTiempoEstimado);
         textPrecio = findViewById(R.id.textPrecio);
         radioGrupoTamaño = findViewById(R.id.radioGrupoTamaño);
-
         checkOzono = findViewById(R.id.checkOzono);
         checkAntilluvia = findViewById(R.id.checkAntilluvia);
         checkFaros = findViewById(R.id.checkFaros);
-
         recyclerHorarios = findViewById(R.id.recyclerHorarios);
         btnReservar = findViewById(R.id.btnReservar);
         btnAbrirCalendario = findViewById(R.id.btnAbrirCalendario);
-
         txtDireccion = findViewById(R.id.txtDireccion);
-
         menuIcon = findViewById(R.id.menuIcon);
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
-
-        // DESPLEGABLES
         headerTamano = findViewById(R.id.headerTamano);
         contenidoTamano = findViewById(R.id.contenidoTamano);
         iconTamano = findViewById(R.id.iconTamano);
-
         headerExtras = findViewById(R.id.headerExtras);
         contenidoExtras = findViewById(R.id.contenidoExtras);
         iconExtras = findViewById(R.id.iconExtras);
-
         headerHorarios = findViewById(R.id.headerHorarios);
         iconHorarios = findViewById(R.id.iconHorarios);
-
-        // ⭐ NUEVO: referencia al icono de información
         infoTamano = findViewById(R.id.infoTamano);
 
-        // HEADER DEL MENÚ
         View headerView = navigationView.getHeaderView(0);
         profileImage = headerView.findViewById(R.id.profileImage);
         textNombreHeader = headerView.findViewById(R.id.textNombreHeader);
 
-        // OBTENER SERVICIO SELECCIONADO
         servicioClave = getIntent().getStringExtra("servicio");
         if (servicioClave == null) servicioClave = "";
 
-        // MOSTRAR TIEMPO ESTIMADO
         if (tiempos.containsKey(servicioClave)) {
             textTiempoEstimado.setText("Tiempo estimado: " + tiempos.get(servicioClave));
         }
 
-        // ACTUALIZAR PRECIO
+        // LISTENERS PARA PRECIO
         radioGrupoTamaño.setOnCheckedChangeListener((group, checkedId) -> actualizarPrecio());
         checkOzono.setOnCheckedChangeListener((b, c) -> actualizarPrecio());
         checkAntilluvia.setOnCheckedChangeListener((b, c) -> actualizarPrecio());
         checkFaros.setOnCheckedChangeListener((b, c) -> actualizarPrecio());
 
-        // FECHA INICIAL
+        // FECHA Y HORARIOS INICIALES
         fechaSeleccionada = LocalDate.now();
         actualizarTextoFecha(fechaSeleccionada);
 
-        // HORARIOS INICIALES
         int duracion = obtenerDuracionServicio(servicioClave);
         List<String> horariosDinamicos = obtenerHorarios(fechaSeleccionada, duracion);
 
@@ -165,7 +140,10 @@ public class Reserva extends AppCompatActivity {
         adapter = new HorarioAdapter(horariosDinamicos, selected -> horarioSeleccionado = selected);
         recyclerHorarios.setAdapter(adapter);
 
-        // CALENDARIO
+        // Cargar bloqueos para el día de hoy
+        consultarDisponibilidad(fechaSeleccionada);
+
+        // CALENDARIO CON BLOQUEO DE CITAS
         btnAbrirCalendario.setOnClickListener(v -> {
             MaterialDatePicker<Long> picker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Selecciona una fecha")
@@ -181,173 +159,62 @@ public class Reserva extends AppCompatActivity {
 
                 actualizarTextoFecha(fechaSeleccionada);
 
+                // 1. Actualizamos lista base
                 int duracionServicio = obtenerDuracionServicio(servicioClave);
                 List<String> nuevosHorarios = obtenerHorarios(fechaSeleccionada, duracionServicio);
                 adapter.updateList(nuevosHorarios);
+
+                // 2. Consultamos Firebase para bloquear las ocupadas
+                consultarDisponibilidad(fechaSeleccionada);
             });
         });
 
-        // BOTÓN RESERVAR
         btnReservar.setOnClickListener(v -> guardarReserva());
 
-        // MENÚ LATERAL
         menuIcon.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-
             if (id == R.id.nav_home) startActivity(new Intent(this, PantallaPrincipal.class));
             else if (id == R.id.nav_reserva) startActivity(new Intent(this, Servicios.class));
-            else if (id == R.id.nav_servicios)
-                startActivity(new Intent(this, PantallaServicios.class));
-            else if (id == R.id.nav_productos)
-                startActivity(new Intent(this, PantallaProductos.class));
-            else if (id == R.id.nav_mis_citas)
-                startActivity(new Intent(this, PantallaMisCitas.class));
-            else if (id == R.id.nav_contacto)
-                startActivity(new Intent(this, PantallaContacto.class));
+            else if (id == R.id.nav_servicios) startActivity(new Intent(this, PantallaServicios.class));
+            else if (id == R.id.nav_productos) startActivity(new Intent(this, PantallaProductos.class));
+            else if (id == R.id.nav_mis_citas) startActivity(new Intent(this, PantallaMisCitas.class));
+            else if (id == R.id.nav_contacto) startActivity(new Intent(this, PantallaContacto.class));
             else if (id == R.id.nav_perfil) startActivity(new Intent(this, PantallaPerfil.class));
-
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
 
         cargarDatosUsuario();
-
-        pickImageLauncher = registerForActivityResult(
-                new ActivityResultContracts.GetContent(),
-                uri -> {
-                    if (uri != null) subirImagenAFirebase(uri);
-                });
-
-        profileImage.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
-
         configurarDesplegables();
 
-        // ⭐⭐⭐ NUEVO: INFORMACIÓN DEL TAMAÑO DEL VEHÍCULO ⭐⭐⭐
-        infoTamano.setOnClickListener(v -> {
-
-            int seleccionado = radioGrupoTamaño.getCheckedRadioButtonId();
-            String mensaje;
-
-            if (seleccionado == R.id.radioPequeno) {
-                mensaje = "Vehículos pequeños:\n- Fiat 500\n- Seat Ibiza\n- Renault Clio\n- Utilitarios compactos";
-
-            } else if (seleccionado == R.id.radioMediano) {
-                mensaje = "Vehículos medianos:\n- Seat León\n- Nissan Qashqai\n- Hyundai Tucson\n- Berlinas y SUV medios";
-
-            } else if (seleccionado == R.id.radioGrande) {
-                mensaje = "Vehículos grandes:\n- Kia Sorento\n- VW Sharan\n- Furgonetas tipo Transporter\n- SUV grandes";
-
-            } else {
-                mensaje = "Selecciona un tamaño para ver la información.";
-            }
-
-            new AlertDialog.Builder(Reserva.this)
-                    .setTitle("Información del vehículo")
-                    .setMessage(mensaje)
-                    .setPositiveButton("Entendido", null)
-                    .show();
-        });
-
+        infoTamano.setOnClickListener(v -> mostrarDialogoInfo());
     }
 
-    // -------------------------------
-    // NUEVO SISTEMA DE HORARIOS
-    // -------------------------------
+    // --- NUEVO: MÉTODO PARA CONSULTAR DISPONIBILIDAD ---
+    private void consultarDisponibilidad(LocalDate fecha) {
+        FirebaseFirestore.getInstance().collection("reservas")
+                .whereEqualTo("extras.fecha", fecha.toString())
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<String> ocupados = new ArrayList<>();
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        String estado = doc.getString("status"); // O "estado" según tu base de datos
+                        if (estado == null) estado = doc.getString("estado");
 
-    private int obtenerDuracionServicio(String clave) {
-        switch (clave) {
-            case "interior_sin_tapiceria":
-                return 2;
-            case "interior_con_tapiceria":
-                return 3;
-            case "exterior":
-                return 1;
-            case "completa":
-                return 3;
-            default:
-                return 1;
-        }
+                        if (estado != null && !estado.equals("cancelada")) {
+                            Map<String, Object> ex = (Map<String, Object>) doc.get("extras");
+                            if (ex != null) {
+                                String h = (String) ex.get("horario");
+                                if (h != null) ocupados.add(h);
+                            }
+                        }
+                    }
+                    adapter.setHorariosOcupados(ocupados);
+                });
     }
 
-    private List<String> obtenerHorarios(LocalDate fecha, int duracionHoras) {
-
-        List<String> horarios = new ArrayList<>();
-
-        DayOfWeek dia = fecha.getDayOfWeek();
-        boolean esFinDeSemana = (dia == DayOfWeek.SATURDAY || dia == DayOfWeek.SUNDAY);
-
-        int[][] semanaTarde = {{16, 20}};
-        int[][] findeManana = {{9, 14}};
-        int[][] findeTarde = {{16, 20}};
-
-        if (!esFinDeSemana) {
-            horarios.addAll(generarBloques(semanaTarde, duracionHoras));
-        } else {
-            horarios.addAll(generarBloques(findeManana, duracionHoras));
-            horarios.addAll(generarBloques(findeTarde, duracionHoras));
-        }
-
-        return horarios;
-    }
-
-    private List<String> generarBloques(int[][] rangos, int duracionHoras) {
-
-        List<String> bloques = new ArrayList<>();
-
-        for (int[] rango : rangos) {
-
-            int inicio = rango[0];
-            int fin = rango[1];
-
-            for (int hora = inicio; hora + duracionHoras <= fin; hora++) {
-
-                int horaFin = hora + duracionHoras;
-
-                String bloque = String.format("%02d:00 - %02d:00", hora, horaFin);
-                bloques.add(bloque);
-            }
-        }
-
-        return bloques;
-    }
-
-    // -------------------------------
-    // RESTO DEL CÓDIGO SIN CAMBIOS
-    // -------------------------------
-
-    private void configurarDesplegables() {
-        headerTamano.setOnClickListener(v -> {
-            if (contenidoTamano.getVisibility() == View.VISIBLE) {
-                contenidoTamano.setVisibility(View.GONE);
-                iconTamano.setText("▼");
-            } else {
-                contenidoTamano.setVisibility(View.VISIBLE);
-                iconTamano.setText("▲");
-            }
-        });
-
-        headerExtras.setOnClickListener(v -> {
-            if (contenidoExtras.getVisibility() == View.VISIBLE) {
-                contenidoExtras.setVisibility(View.GONE);
-                iconExtras.setText("▼");
-            } else {
-                contenidoExtras.setVisibility(View.VISIBLE);
-                iconExtras.setText("▲");
-            }
-        });
-
-        headerHorarios.setOnClickListener(v -> {
-            if (recyclerHorarios.getVisibility() == View.VISIBLE) {
-                recyclerHorarios.setVisibility(View.GONE);
-                iconHorarios.setText("▼");
-            } else {
-                recyclerHorarios.setVisibility(View.VISIBLE);
-                iconHorarios.setText("▲");
-            }
-        });
-    }
-
+    // --- ARREGLO DEL PRECIO: SIN ESPACIOS Y CON EURO ---
     private void actualizarPrecio() {
         if (!precios.containsKey(servicioClave)) {
             textPrecio.setText("Precio: -");
@@ -356,55 +223,46 @@ public class Reserva extends AppCompatActivity {
 
         Integer[] preciosServicio = precios.get(servicioClave);
         int index = 0;
-
         int checkedId = radioGrupoTamaño.getCheckedRadioButtonId();
         if (checkedId == R.id.radioMediano) index = 1;
         else if (checkedId == R.id.radioGrande) index = 2;
 
         int precioBase = preciosServicio[index];
-
         int precioExtras = 0;
         if (checkOzono.isChecked()) precioExtras += 5;
         if (checkAntilluvia.isChecked()) precioExtras += 5;
         if (checkFaros.isChecked()) precioExtras += 20;
 
-        int precioTotal = precioBase + precioExtras;
+        int total = precioBase + precioExtras;
 
-        textPrecio.setText(String.format(Locale.getDefault(), "Precio: %d €", precioTotal));
+        // Formato limpio: "Precio: 90 €"
+        textPrecio.setText("Precio: " + total + " €");
     }
 
     private void guardarReserva() {
-
         if (horarioSeleccionado == null) {
             Toast.makeText(this, "Selecciona un horario", Toast.LENGTH_SHORT).show();
             return;
         }
-
         if (radioGrupoTamaño.getCheckedRadioButtonId() == -1) {
             Toast.makeText(this, "Selecciona el tamaño del vehículo", Toast.LENGTH_SHORT).show();
             return;
         }
-
         String direccion = txtDireccion.getText().toString().trim();
         if (direccion.isEmpty()) {
-            Toast.makeText(this, "Introduce una dirección para completar la reserva", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Introduce tu domicilio para completar la reserva", Toast.LENGTH_SHORT).show();
             return;
         }
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            Toast.makeText(this, "Debes iniciar sesión", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String uid = user.getUid();
+        if (user == null) return;
 
         Map<String, Object> extras = new HashMap<>();
         extras.put("servicio", servicioClave);
         extras.put("fecha", fechaSeleccionada.toString());
         extras.put("horario", horarioSeleccionado);
         extras.put("tamaño", obtenerTamañoSeleccionado());
-        extras.put("precio", textPrecio.getText().toString());
+        extras.put("precio", textPrecio.getText().toString().replace("Precio: ", ""));
         extras.put("direccion", direccion);
         extras.put("timestamp", System.currentTimeMillis());
 
@@ -414,7 +272,7 @@ public class Reserva extends AppCompatActivity {
         if (checkFaros.isChecked()) extrasOpcionales.add("Pulido de faros");
 
         Map<String, Object> reserva = new HashMap<>();
-        reserva.put("usuarioId", uid);
+        reserva.put("usuarioId", user.getUid());
         reserva.put("estado", "pendiente");
         reserva.put("extras", extras);
         reserva.put("extrasOpcionales", extrasOpcionales);
@@ -425,12 +283,63 @@ public class Reserva extends AppCompatActivity {
                     new AlertDialog.Builder(this)
                             .setTitle("Reserva confirmada")
                             .setMessage("Tu cita ha sido guardada correctamente.")
-                            .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                            .setPositiveButton("OK", (dialog, which) -> finish())
                             .show();
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error al guardar la reserva", Toast.LENGTH_LONG).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(this, "Error al guardar", Toast.LENGTH_LONG).show());
+    }
+
+    private int obtenerDuracionServicio(String clave) {
+        switch (clave) {
+            case "interior_sin_tapiceria": return 2;
+            case "interior_con_tapiceria": return 3;
+            case "exterior": return 1;
+            case "completa": return 3;
+            default: return 1;
+        }
+    }
+
+    private List<String> obtenerHorarios(LocalDate fecha, int duracionHoras) {
+        List<String> horarios = new ArrayList<>();
+        DayOfWeek dia = fecha.getDayOfWeek();
+        boolean esFinDeSemana = (dia == DayOfWeek.SATURDAY || dia == DayOfWeek.SUNDAY);
+        int[][] semanaTarde = {{16, 20}};
+        int[][] findeManana = {{9, 14}};
+        int[][] findeTarde = {{16, 20}};
+
+        if (!esFinDeSemana) {
+            horarios.addAll(generarBloques(semanaTarde, duracionHoras));
+        } else {
+            horarios.addAll(generarBloques(findeManana, duracionHoras));
+            horarios.addAll(generarBloques(findeTarde, duracionHoras));
+        }
+        return horarios;
+    }
+
+    private List<String> generarBloques(int[][] rangos, int duracionHoras) {
+        List<String> bloques = new ArrayList<>();
+        for (int[] rango : rangos) {
+            for (int hora = rango[0]; hora + duracionHoras <= rango[1]; hora++) {
+                bloques.add(String.format("%02d:00 - %02d:00", hora, hora + duracionHoras));
+            }
+        }
+        return bloques;
+    }
+
+    private void configurarDesplegables() {
+        headerTamano.setOnClickListener(v -> toggleVisibility(contenidoTamano, iconTamano));
+        headerExtras.setOnClickListener(v -> toggleVisibility(contenidoExtras, iconExtras));
+        headerHorarios.setOnClickListener(v -> toggleVisibility(recyclerHorarios, iconHorarios));
+    }
+
+    private void toggleVisibility(View v, TextView icon) {
+        if (v.getVisibility() == View.VISIBLE) {
+            v.setVisibility(View.GONE);
+            icon.setText("▼");
+        } else {
+            v.setVisibility(View.VISIBLE);
+            icon.setText("▲");
+        }
     }
 
     private String obtenerTamañoSeleccionado() {
@@ -441,51 +350,29 @@ public class Reserva extends AppCompatActivity {
     }
 
     private void actualizarTextoFecha(LocalDate fecha) {
-        String diaSemana = fecha.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
+        String dia = fecha.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
         String mes = fecha.getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
-        String texto = "ESPACIOS DISPONIBLES PARA EL " +
-                diaSemana.toUpperCase() + " " + fecha.getDayOfMonth() + " " + mes.toUpperCase();
-        textFecha.setText(texto);
+        textFecha.setText("ESPACIOS DISPONIBLES PARA EL " + dia.toUpperCase() + " " + fecha.getDayOfMonth() + " " + mes.toUpperCase());
     }
 
     private void cargarDatosUsuario() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("usuarios").document(user.getUid()).get()
-                .addOnSuccessListener(document -> {
-                    if (document.exists()) {
-
-                        String nombreFirestore = document.getString("nombre");
-                        textNombreHeader.setText(nombreFirestore != null ? nombreFirestore : "No disponible");
-
-                        String url = document.getString("imagenPerfil");
-                        if (url != null) {
-                            Glide.with(this).load(url).into(profileImage);
-                        }
+        FirebaseFirestore.getInstance().collection("usuarios").document(user.getUid()).get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        textNombreHeader.setText(doc.getString("nombre"));
+                        String url = doc.getString("imagenPerfil");
+                        if (url != null) Glide.with(this).load(url).into(profileImage);
                     }
                 });
-
     }
 
-    private void subirImagenAFirebase(Uri uri) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) return;
-
-        StorageReference ref = FirebaseStorage.getInstance()
-                .getReference("profileImages/" + user.getUid() + ".jpg");
-
-        ref.putFile(uri).addOnSuccessListener(task -> {
-            ref.getDownloadUrl().addOnSuccessListener(downloadUri -> {
-                FirebaseFirestore.getInstance().collection("usuarios")
-                        .document(user.getUid())
-                        .update("imagenPerfil", downloadUri.toString())
-                        .addOnSuccessListener(aVoid -> {
-                            Glide.with(this).load(downloadUri).into(profileImage);
-                            Toast.makeText(this, "Imagen actualizada correctamente", Toast.LENGTH_SHORT).show();
-                        });
-            });
-        });
+    private void mostrarDialogoInfo() {
+        int seleccionado = radioGrupoTamaño.getCheckedRadioButtonId();
+        String msg = (seleccionado == R.id.radioPequeno) ? "Fiat 500, Ibiza..." :
+                (seleccionado == R.id.radioMediano) ? "León, Qashqai..." :
+                        (seleccionado == R.id.radioGrande) ? "Sorento, Furgonetas..." : "Selecciona un tamaño primero.";
+        new AlertDialog.Builder(this).setTitle("Info Vehículo").setMessage(msg).setPositiveButton("OK", null).show();
     }
 }

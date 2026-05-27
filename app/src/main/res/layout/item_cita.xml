@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@drawable/card_cita"
     android:layout_marginBottom="16dp">
-
 
     <!-- SERVICIO -->
     <TextView
@@ -18,7 +18,6 @@
         android:textStyle="bold"
         android:fontFamily="@font/michroma"/>
 
-
     <!-- FECHA Y HORA -->
     <TextView
         android:id="@+id/textFecha"
@@ -28,7 +27,6 @@
         android:textSize="14sp"
         android:layout_marginTop="6dp"/>
 
-
     <TextView
         android:id="@+id/textHora"
         android:layout_width="match_parent"
@@ -36,7 +34,6 @@
         android:textColor="#555"
         android:textSize="14sp"
         android:layout_marginTop="2dp"/>
-
 
     <!-- PRECIO -->
     <TextView
@@ -48,7 +45,6 @@
         android:textStyle="bold"
         android:layout_marginTop="10dp"/>
 
-
     <!-- TAMAÑO -->
     <TextView
         android:id="@+id/textTamaño"
@@ -58,15 +54,42 @@
         android:textSize="14sp"
         android:layout_marginTop="6dp"/>
 
-
-    <!-- ESTADO -->
+    <!-- ESTADO (TEXTVIEW) -->
     <TextView
         android:id="@+id/textEstado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
-        android:textSize="13sp"
-        android:padding="6dp"
+        android:textSize="11sp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/michroma"
+        android:gravity="center"
         android:background="@drawable/estado_badge"/>
+
+    <!-- BOTÓN CANCELAR (BOTÓN) -->
+    <Button
+        android:id="@+id/btnCancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Cancelar Reserva"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#D32F2F"
+        android:textSize="11sp"
+        android:fontFamily="@font/michroma"
+        android:textAllCaps="false"
+        android:visibility="gone" />
+
 </LinearLayout>

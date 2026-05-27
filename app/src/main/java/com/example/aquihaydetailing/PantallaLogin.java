@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -50,7 +51,7 @@ public class PantallaLogin extends AppCompatActivity {
         ImageView iconTogglePassword = findViewById(R.id.iconTogglePassword);
         TextView linkOlvidado = findViewById(R.id.textContraseñaOlvidada);
 
-        // 👁️ Lógica del ojo con fuente fija
+        // Lógica para mostrar/ocultar contraseña
         iconTogglePassword.setOnClickListener(v -> {
             boolean visible = (txtContraseña.getInputType() & InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
                     == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
@@ -68,6 +69,7 @@ public class PantallaLogin extends AppCompatActivity {
             txtContraseña.setTextSize(16);
         });
 
+        // Recordar correo con SharedPreferences
         SharedPreferences prefs = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
         String correoGuardado = prefs.getString("correo", "");
         if (!correoGuardado.isEmpty()) {
@@ -75,6 +77,7 @@ public class PantallaLogin extends AppCompatActivity {
             checkRecordar.setChecked(true);
         }
 
+        // Listeners para quitar el error visual al escribir
         txtLogin.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -107,18 +110,12 @@ public class PantallaLogin extends AppCompatActivity {
                 errorLogin.setVisibility(View.VISIBLE);
                 txtLogin.setBackgroundResource(R.drawable.edittext_box_error);
                 valido = false;
-            } else {
-                errorLogin.setVisibility(View.GONE);
-                txtLogin.setBackgroundResource(R.drawable.edittext_box);
             }
 
             if (contraseña.isEmpty()) {
                 errorContraseña.setVisibility(View.VISIBLE);
                 txtContraseña.setBackgroundResource(R.drawable.edittext_box_error);
                 valido = false;
-            } else {
-                errorContraseña.setVisibility(View.GONE);
-                txtContraseña.setBackgroundResource(R.drawable.edittext_box);
             }
 
             if (!valido) {
@@ -126,6 +123,7 @@ public class PantallaLogin extends AppCompatActivity {
                 return;
             }
 
+            // Guardar o borrar preferencia de recordar correo
             SharedPreferences.Editor editor = prefs.edit();
             if (checkRecordar.isChecked()) {
                 editor.putString("correo", correo);
@@ -134,11 +132,12 @@ public class PantallaLogin extends AppCompatActivity {
             }
             editor.apply();
 
+            // PROCESO DE LOGIN CON FIREBASE
             mAuth.signInWithEmailAndPassword(correo, contraseña)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
-
+                            // Sincronización con Firestore
                             db.collection("usuarios").document(user.getUid())
                                     .get()
                                     .addOnSuccessListener(document -> {
@@ -153,18 +152,30 @@ public class PantallaLogin extends AppCompatActivity {
                             startActivity(new Intent(this, PantallaPrincipal.class));
                             finish();
                         } else {
+                            // MANEJO DE ERRORES MEJORADO PARA EL TRIBUNAL
                             Exception e = task.getException();
+                            String mensajeAlerta;
+
                             if (e instanceof FirebaseAuthInvalidUserException) {
-                                Toast.makeText(this, "No existe ese correo, regístrate primero", Toast.LENGTH_LONG).show();
+                                // Este mensaje aparece gracias a haber desactivado la protección en la consola
+                                mensajeAlerta = "El usuario no existe o todavía no está registrado. Por favor, debe darse de alta.";
                             } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                                mensajeAlerta = "La contraseña introducida es incorrecta. Vuelva a intentarlo.";
                             } else {
-                                Toast.makeText(this, "Error al iniciar sesión: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                mensajeAlerta = "Error de conexión o de servidor. Inténtelo más tarde.";
                             }
+
+                            // Usamos AlertDialog para que el mensaje no desaparezca rápido
+                            new AlertDialog.Builder(PantallaLogin.this)
+                                    .setTitle("Aviso de acceso")
+                                    .setMessage(mensajeAlerta)
+                                    .setPositiveButton("Entendido", null)
+                                    .show();
                         }
                     });
         });
 
+        // Navegación a otras pantallas
         findViewById(R.id.textRegistrarse).setOnClickListener(v ->
                 startActivity(new Intent(this, PantallaRegistro.class)));
 

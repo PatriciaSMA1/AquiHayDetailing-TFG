@@ -21,11 +21,11 @@ public class HorarioAdapter extends RecyclerView.Adapter<HorarioAdapter.HorarioV
     }
 
     private final List<String> horarios;
+    private List<String> ocupados = new ArrayList<>(); // ⭐ Lista de horas ya reservadas
     private String seleccionado = null;
     private final OnHorarioSelectListener onSelect;
 
     public HorarioAdapter(List<String> horarios, OnHorarioSelectListener onSelect) {
-        // Convertimos la lista en mutable para poder actualizarla
         this.horarios = new ArrayList<>(horarios);
         this.onSelect = onSelect;
     }
@@ -43,18 +43,28 @@ public class HorarioAdapter extends RecyclerView.Adapter<HorarioAdapter.HorarioV
         String horario = horarios.get(position);
         holder.text.setText(horario);
 
-        boolean isSelected = horario.equals(seleccionado);
-        holder.card.setCardBackgroundColor(isSelected ? Color.parseColor("#FFD700") : Color.WHITE);
-        holder.text.setTextColor(isSelected ? Color.BLACK : Color.parseColor("#333333"));
-        holder.card.setStrokeWidth(isSelected ? 2 : 1);
-        holder.card.setStrokeColor(isSelected ? Color.parseColor("#000000") : Color.parseColor("#DDDDDD"));
-        holder.card.setElevation(isSelected ? 6f : 2f);
+        // --- LÓGICA DE BLOQUEO SI ESTÁ OCUPADO ---
+        if (ocupados.contains(horario)) {
+            holder.card.setCardBackgroundColor(Color.parseColor("#E0E0E0")); // Gris claro
+            holder.text.setTextColor(Color.parseColor("#9E9E9E")); // Texto apagado
+            holder.card.setStrokeColor(Color.TRANSPARENT);
+            holder.itemView.setEnabled(false); // ❌ No se puede clicar
+            holder.itemView.setAlpha(0.6f);
+        } else {
+            holder.itemView.setEnabled(true);
+            holder.itemView.setAlpha(1.0f);
 
-        holder.itemView.setOnClickListener(v -> {
-            seleccionado = horario;
-            notifyDataSetChanged();
-            onSelect.onSelect(horario);
-        });
+            boolean isSelected = horario.equals(seleccionado);
+            holder.card.setCardBackgroundColor(isSelected ? Color.parseColor("#FFD700") : Color.WHITE);
+            holder.text.setTextColor(isSelected ? Color.BLACK : Color.parseColor("#333333"));
+            holder.card.setStrokeColor(isSelected ? Color.BLACK : Color.parseColor("#DDDDDD"));
+
+            holder.itemView.setOnClickListener(v -> {
+                seleccionado = horario;
+                notifyDataSetChanged();
+                onSelect.onSelect(horario);
+            });
+        }
     }
 
     @Override
@@ -62,7 +72,13 @@ public class HorarioAdapter extends RecyclerView.Adapter<HorarioAdapter.HorarioV
         return horarios.size();
     }
 
-    // ⭐⭐⭐ MÉTODO NUEVO PARA ACTUALIZAR LA LISTA ⭐⭐⭐
+    // ⭐ Método para que la Activity nos diga qué horas bloquear
+    public void setHorariosOcupados(List<String> listaOcupados) {
+        this.ocupados = listaOcupados;
+        this.seleccionado = null; // Deseleccionamos si había algo marcado
+        notifyDataSetChanged();
+    }
+
     public void updateList(List<String> nuevaLista) {
         horarios.clear();
         horarios.addAll(nuevaLista);
@@ -80,7 +96,3 @@ public class HorarioAdapter extends RecyclerView.Adapter<HorarioAdapter.HorarioV
         }
     }
 }
-
-
-
-

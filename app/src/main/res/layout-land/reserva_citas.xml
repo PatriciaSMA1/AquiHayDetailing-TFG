@@ -268,7 +268,7 @@
                     android:id="@+id/txtDireccion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Dirección"
+                    android:hint="Domicilio"
                     android:textSize="14sp"
                     android:fontFamily="@font/michroma"
                     android:background="@drawable/edittext_box"

@@ -1,6 +1,7 @@
 package com.example.aquihaydetailing;
 
 public class Cita {
+    private String id; // ID del documento de Firebase (necesario para cancelar)
     private String servicio;
     private String fecha;
     private String hora;
@@ -19,6 +20,22 @@ public class Cita {
         this.estado = estado;
     }
 
+    // --- NUEVOS MÉTODOS AÑADIDOS ---
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    // --- GETTERS EXISTENTES ---
+
     public String getServicio() { return servicio; }
     public String getFecha() { return fecha; }
     public String getHora() { return hora; }
@@ -26,5 +43,4 @@ public class Cita {
     public String getTamaño() { return tamaño; }
     public String getEstado() { return estado; }
 }
-
 

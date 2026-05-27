@@ -55,7 +55,7 @@ public class PantallaPerfil extends AppCompatActivity {
 
         textNombre = findViewById(R.id.textNombre);
         textCorreo = findViewById(R.id.textCorreo);
-        textTelefono = findViewById(R.id.textTelefono); // 📱 NUEVO
+        textTelefono = findViewById(R.id.textTelefono);
         textReservas = findViewById(R.id.textReservas);
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
         btnEditarPerfil = findViewById(R.id.btnEditarPerfil);
@@ -152,14 +152,25 @@ public class PantallaPerfil extends AppCompatActivity {
 
         profileImage.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
 
-        // Cerrar sesión
+        // Código corregido para Cerrar Sesión
         btnCerrarSesion.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
                     .setTitle("¿Cerrar sesión?")
                     .setMessage("¿Estás seguro de que quieres cerrar sesión?")
                     .setPositiveButton("Sí", (dialog, which) -> {
+                        // 1. Se cierra la sesion en Firebase
                         mAuth.signOut();
-                        startActivity(new Intent(this, PantallaLogin.class));
+
+                        // 2. Creamos el Intent para ir al Login
+                        Intent intent = new Intent(this, PantallaLogin.class);
+
+                        // 3. ESTA ES LA CLAVE: Limpiamos toda la pila de actividades
+                        // Esto elimina cualquier pantalla que hubiera abierta "detrás"
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                        startActivity(intent);
+
+                        // 4. Cerramos la actividad actual
                         finish();
                     })
                     .setNegativeButton("No", null)

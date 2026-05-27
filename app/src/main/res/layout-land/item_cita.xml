@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="12dp"
     android:background="@drawable/card_cita"
-    android:layout_marginBottom="10dp">
+    android:layout_marginBottom="12dp">
 
     <!-- SERVICIO -->
     <TextView
@@ -54,14 +54,42 @@
         android:textSize="13sp"
         android:layout_marginTop="4dp"/>
 
-    <!-- ESTADO -->
+    <!-- ESTADO (TEXTVIEW) -->
     <TextView
         android:id="@+id/textEstado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:padding="5dp"
-        android:layout_marginTop="8dp"
+        android:textSize="11sp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/michroma"
+        android:gravity="center"
         android:background="@drawable/estado_badge"/>
+
+    <!-- BOTÓN CANCELAR (BOTÓN) -->
+    <Button
+        android:id="@+id/btnCancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Cancelar Reserva"
+        android:textSize="11sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#D32F2F"
+        android:fontFamily="@font/michroma"
+        android:textAllCaps="false"
+        android:visibility="gone" />
+
 </LinearLayout>
